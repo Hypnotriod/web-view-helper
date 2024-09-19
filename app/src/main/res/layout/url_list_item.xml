@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="40dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="3dp"
+        android:text=""
+        android:textSize="18sp"
+        android:singleLine="false"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:id="@+id/url_item_text_view"
+        android:background="@drawable/url_item_text_view"
+        android:textColor="@color/url_list_item_text"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent">
+
+        <Button
+            android:text="@string/delete_url_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:id="@+id/url_item_delete_button"/>
+    </RelativeLayout >
+
+
+
+
+
+</LinearLayout>

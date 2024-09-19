@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Web View Helper</string>
+    <string name="navigation_dialog_name">Browse</string>
+    <string name="open_url_button"> GO </string>
+    <string name="exit_button">Exit Web View Helper</string>
+    <string name="delete_url_button">delete</string>
+    <string name="bad_url">Bad URL!</string>
+</resources>
