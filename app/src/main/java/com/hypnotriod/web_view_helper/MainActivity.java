@@ -1,9 +1,13 @@
 package com.hypnotriod.web_view_helper;
 
 import android.annotation.SuppressLint;
+import android.content.res.Configuration;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.WebView;
@@ -23,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDialog.
     static final String KEY_HIDE_NAVIGATION = "HIDE_NAVIGATION";
     static final String KEY_LAYOUT_NO_LIMITS = "LAYOUT_NO_LIMITS";
 
+    View root;
     WebView webView;
     String currentUrlAddress = "http://";
     ArrayList<String> recentURLs;
@@ -35,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDialog.
         super.onCreate(savedInstanceState);
         loadData();
         setContentView(R.layout.activity_main);
+        initRootView();
         initWebView();
         launchWebView();
         updateSystemUiLayout();
@@ -58,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDialog.
         this.fullScreen = fullScreen;
         updateSystemUiLayout();
         saveData();
+        new Handler(Looper.getMainLooper()).postDelayed(this::adjustViewByActionBarHeight, 200);
     }
 
     @Override
@@ -76,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDialog.
 
     @Override
     public void onNavigationDialogDismiss() {
+        updateSystemUiLayout();
     }
 
     public void onNavigationDialogExit() {
@@ -98,13 +106,20 @@ public class MainActivity extends AppCompatActivity implements NavigationDialog.
 
     @SuppressLint("SetJavaScriptEnabled")
     void initWebView() {
-        webView = (WebView) findViewById(R.id.webView);
+        webView = findViewById(R.id.webView);
         webView.setWebViewClient(new WebViewClient());
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setDomStorageEnabled(true);
         webView.getSettings().setDatabaseEnabled(true);
         webView.getSettings().setUserAgentString(System.getProperty("http.agent"));
         WebView.setWebContentsDebuggingEnabled(true);
+    }
+
+    void initRootView() {
+        root = findViewById(R.id.root);
+        root.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            adjustViewByActionBarHeight();
+        });
     }
 
     void loadData() {
@@ -178,5 +193,16 @@ public class MainActivity extends AppCompatActivity implements NavigationDialog.
                     View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
         }
         getWindow().getDecorView().setSystemUiVisibility(systemUiVisibility);
+    }
+
+    private void adjustViewByActionBarHeight() {
+        if (!layoutNoLimits && !fullScreen && hideNavigation &&
+                getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Rect rectangle = new Rect();
+            getWindow().getDecorView().getWindowVisibleDisplayFrame(rectangle);
+            root.setTop(rectangle.top);
+        } else {
+            root.setTop(0);
+        }
     }
 }
