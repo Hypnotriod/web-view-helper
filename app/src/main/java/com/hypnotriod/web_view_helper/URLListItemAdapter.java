@@ -11,10 +11,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class URLListItemAdapter extends BaseAdapter implements View.OnClickListener {
-    private ArrayList<String> urls;
-    private Context context;
-    private LayoutInflater inflater;
-    private OnItemClickListener onItemClickListener;
+    private final ArrayList<String> urls;
+    private final Context context;
+    private final LayoutInflater inflater;
+    private final OnItemClickListener onItemClickListener;
 
     public interface OnItemClickListener {
         void onItemClick(int itemPosition);
@@ -51,8 +51,8 @@ public class URLListItemAdapter extends BaseAdapter implements View.OnClickListe
             view = inflater.inflate(R.layout.url_list_item, parent, false);
         }
 
-        Button deleteButton = (Button) view.findViewById(R.id.url_item_delete_button);
-        TextView textView = (TextView) view.findViewById(R.id.url_item_text_view);
+        Button deleteButton = view.findViewById(R.id.url_item_delete_button);
+        TextView textView = view.findViewById(R.id.url_item_text_view);
 
         deleteButton.setOnClickListener(this);
         textView.setOnClickListener(this);

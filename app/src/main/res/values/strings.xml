@@ -5,4 +5,7 @@
     <string name="exit_button">Exit Web View Helper</string>
     <string name="delete_url_button">delete</string>
     <string name="bad_url">Bad URL!</string>
+    <string name="full_screen">No Status</string>
+    <string name="hide_navigation">No Navigation</string>
+    <string name="no_limits">No Limits</string>
 </resources>

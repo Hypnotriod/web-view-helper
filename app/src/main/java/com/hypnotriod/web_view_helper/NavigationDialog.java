@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -17,15 +18,20 @@ import java.util.ArrayList;
 public class NavigationDialog extends DialogFragment implements View.OnClickListener, URLListItemAdapter.OnItemClickListener {
     String currentUrlAddress = "";
     ArrayList<String> recentURLs;
+    boolean fullScreen = false;
+    boolean hideNavigation = false;
+    boolean layoutNoLimits = false;
 
     Button openURLButton;
-    Button exitButton;
     EditText urlTextInput;
     ListView listViewRecentURLs;
+    CheckBox fullscreenCheckbox;
+    CheckBox hideNavigationCheckbox;
+    CheckBox layoutNoLimitsCheckbox;
 
     Activity context;
 
-    private NavigationDialogListener _listener;
+    private NavigationDialogListener dialogListener;
 
     public interface NavigationDialogListener {
         void onNavigationDialogURLChosen(String url);
@@ -33,12 +39,29 @@ public class NavigationDialog extends DialogFragment implements View.OnClickList
         void onNavigationDialogExit();
 
         void onNavigationDialogItemDelete(int position);
+
+        void onToggleFullScreen(boolean fullScreen);
+
+        void onToggleHideNavigation(boolean hide);
+
+        void onToggleLayoutNoLimits(boolean layoutNoLimits);
+
+        void onNavigationDialogDismiss();
     }
 
-    public void setSettings(String currentURLAddress, ArrayList<String> recentURLs, NavigationDialogListener listener) {
-        _listener = listener;
-        currentUrlAddress = currentURLAddress;
+    public void setSettings(
+            String currentURLAddress,
+            ArrayList<String> recentURLs,
+            boolean fullScreen,
+            boolean hideNavigation,
+            boolean layoutNoLimits,
+            NavigationDialogListener dialogListener) {
+        this.dialogListener = dialogListener;
+        this.currentUrlAddress = currentURLAddress;
         this.recentURLs = recentURLs;
+        this.fullScreen = fullScreen;
+        this.hideNavigation = hideNavigation;
+        this.layoutNoLimits = layoutNoLimits;
     }
 
     @Override
@@ -64,9 +87,9 @@ public class NavigationDialog extends DialogFragment implements View.OnClickList
     }
 
     private void initComponents(View view) {
-        openURLButton = (Button) view.findViewById(R.id.btnOpenUrl);
-        urlTextInput = (EditText) view.findViewById(R.id.inputTextUrlAddress);
-        listViewRecentURLs = (ListView) view.findViewById(R.id.listViewRecentURLs);
+        openURLButton = view.findViewById(R.id.btnOpenUrl);
+        urlTextInput = view.findViewById(R.id.inputTextUrlAddress);
+        listViewRecentURLs = view.findViewById(R.id.listViewRecentURLs);
 
         openURLButton.setOnClickListener(this);
         urlTextInput.setText(currentUrlAddress);
@@ -74,6 +97,18 @@ public class NavigationDialog extends DialogFragment implements View.OnClickList
         URLListItemAdapter urlListItemAdapter = new URLListItemAdapter(context, recentURLs, this);
 
         listViewRecentURLs.setAdapter(urlListItemAdapter);
+
+        fullscreenCheckbox = view.findViewById(R.id.checkboxFullscreen);
+        fullscreenCheckbox.setChecked(fullScreen);
+        fullscreenCheckbox.setOnClickListener(this);
+
+        hideNavigationCheckbox = view.findViewById(R.id.checkboxHideNavigation);
+        hideNavigationCheckbox.setChecked(hideNavigation);
+        hideNavigationCheckbox.setOnClickListener(this);
+
+        layoutNoLimitsCheckbox = view.findViewById(R.id.checkboxLayoutNoLimits);
+        layoutNoLimitsCheckbox.setChecked(layoutNoLimits);
+        layoutNoLimitsCheckbox.setOnClickListener(this);
     }
 
     public void onItemClick(int itemPosition) {
@@ -81,13 +116,26 @@ public class NavigationDialog extends DialogFragment implements View.OnClickList
     }
 
     public void onItemDelete(int itemPosition) {
-        _listener.onNavigationDialogItemDelete(itemPosition);
+        dialogListener.onNavigationDialogItemDelete(itemPosition);
     }
 
     public void onClick(View view) {
         if (view.getId() == R.id.btnOpenUrl) {
             openURL();
+        } else if (view.getId() == R.id.checkboxFullscreen) {
+            dialogListener.onToggleFullScreen(fullscreenCheckbox.isChecked());
+        } else if (view.getId() == R.id.checkboxHideNavigation) {
+            dialogListener.onToggleHideNavigation(hideNavigationCheckbox.isChecked());
+        } else if (view.getId() == R.id.checkboxLayoutNoLimits) {
+            dialogListener.onToggleLayoutNoLimits(layoutNoLimitsCheckbox.isChecked());
         }
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        dialogListener.onNavigationDialogDismiss();
+        dialogListener = null;
     }
 
     private final DialogInterface.OnClickListener onExitClick = new DialogInterface.OnClickListener() {
@@ -98,18 +146,17 @@ public class NavigationDialog extends DialogFragment implements View.OnClickList
     };
 
     private void free() {
-        _listener = null;
         recentURLs = null;
     }
 
     private void openURL() {
-        _listener.onNavigationDialogURLChosen(urlTextInput.getText().toString());
+        dialogListener.onNavigationDialogURLChosen(urlTextInput.getText().toString());
         free();
         dismiss();
     }
 
     private void exitApp() {
-        _listener.onNavigationDialogExit();
+        dialogListener.onNavigationDialogExit();
         free();
         dismiss();
     }

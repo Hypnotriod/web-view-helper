@@ -7,7 +7,8 @@
 
     <TableLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        android:stretchColumns="*">
 
         <TableRow
             android:layout_width="match_parent"
@@ -15,17 +16,17 @@
             android:orientation="horizontal">
 
             <EditText
+                android:id="@+id/inputTextUrlAddress"
                 android:layout_width="486dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/inputTextUrlAddress"
-                android:singleLine="true"
+                android:layout_weight="1"
                 android:inputType="textUri"
-                android:layout_weight="1"/>
+                android:singleLine="true" />
 
             <Button
+                android:id="@+id/btnOpenUrl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/btnOpenUrl"
                 android:text="@string/open_url_button" />
         </TableRow>
 
@@ -33,16 +34,42 @@
         <TableRow
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
             <ListView
+                android:id="@+id/listViewRecentURLs"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_weight="1"
-                android:id="@+id/listViewRecentURLs">
-            </ListView>
+                android:layout_weight="1" />
 
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/checkboxFullscreen"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:text="@string/full_screen" />
+
+            <CheckBox
+                android:id="@+id/checkboxHideNavigation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:text="@string/hide_navigation" />
+
+            <CheckBox
+                android:id="@+id/checkboxLayoutNoLimits"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:text="@string/no_limits" />
         </TableRow>
 
     </TableLayout>
