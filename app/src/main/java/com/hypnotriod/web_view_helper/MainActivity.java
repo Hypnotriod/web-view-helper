@@ -94,13 +94,12 @@ public class MainActivity extends AppCompatActivity implements NavigationDialog.
 
     private void showNavigationDialog() {
         NavigationDialog navigationDialog = new NavigationDialog();
-        navigationDialog.setSettings(
-                currentUrlAddress,
-                recentURLs,
-                fullScreen,
-                hideNavigation,
-                layoutNoLimits,
-                this);
+        navigationDialog.dialogListener = this;
+        navigationDialog.currentUrlAddress = currentUrlAddress;
+        navigationDialog.recentURLs = recentURLs;
+        navigationDialog.fullScreen = fullScreen;
+        navigationDialog.hideNavigation = hideNavigation;
+        navigationDialog.layoutNoLimits = layoutNoLimits;
         navigationDialog.show(getFragmentManager(), null);
     }
 
@@ -170,10 +169,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDialog.
         if (layoutNoLimits) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 getWindow().getAttributes().layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
-                getWindow().setFlags(WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS,
-                        WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS);
-                getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                        WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+                getWindow().setFlags(WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS, WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS);
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
             }
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -181,23 +178,21 @@ public class MainActivity extends AppCompatActivity implements NavigationDialog.
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
             }
         }
-        int systemUiVisibility = 0;
         if (fullScreen) {
-            systemUiVisibility |= View.SYSTEM_UI_FLAG_FULLSCREEN |
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
             getWindow().setNavigationBarColor(android.graphics.Color.TRANSPARENT);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        } else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
+        int systemUiVisibility = 0;
         if (hideNavigation) {
-            systemUiVisibility |= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
+            systemUiVisibility |= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
         }
         getWindow().getDecorView().setSystemUiVisibility(systemUiVisibility);
     }
 
     private void adjustViewByActionBarHeight() {
-        if (!layoutNoLimits && !fullScreen && hideNavigation &&
-                getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        if (!layoutNoLimits && !fullScreen && hideNavigation && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             Rect rectangle = new Rect();
             getWindow().getDecorView().getWindowVisibleDisplayFrame(rectangle);
             root.setTop(rectangle.top);

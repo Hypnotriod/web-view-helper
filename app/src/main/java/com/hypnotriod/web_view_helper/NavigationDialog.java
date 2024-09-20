@@ -17,10 +17,11 @@ import java.util.ArrayList;
 
 public class NavigationDialog extends DialogFragment implements View.OnClickListener, URLListItemAdapter.OnItemClickListener {
     String currentUrlAddress = "";
-    ArrayList<String> recentURLs;
+    ArrayList<String> recentURLs = new ArrayList<>();
     boolean fullScreen = false;
     boolean hideNavigation = false;
     boolean layoutNoLimits = false;
+    NavigationDialogListener dialogListener;
 
     Button openURLButton;
     EditText urlTextInput;
@@ -31,7 +32,7 @@ public class NavigationDialog extends DialogFragment implements View.OnClickList
 
     Activity context;
 
-    private NavigationDialogListener dialogListener;
+
 
     public interface NavigationDialogListener {
         void onNavigationDialogURLChosen(String url);
@@ -47,21 +48,6 @@ public class NavigationDialog extends DialogFragment implements View.OnClickList
         void onToggleLayoutNoLimits(boolean layoutNoLimits);
 
         void onNavigationDialogDismiss();
-    }
-
-    public void setSettings(
-            String currentURLAddress,
-            ArrayList<String> recentURLs,
-            boolean fullScreen,
-            boolean hideNavigation,
-            boolean layoutNoLimits,
-            NavigationDialogListener dialogListener) {
-        this.dialogListener = dialogListener;
-        this.currentUrlAddress = currentURLAddress;
-        this.recentURLs = recentURLs;
-        this.fullScreen = fullScreen;
-        this.hideNavigation = hideNavigation;
-        this.layoutNoLimits = layoutNoLimits;
     }
 
     @Override
