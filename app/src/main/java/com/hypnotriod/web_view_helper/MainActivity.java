@@ -116,9 +116,8 @@ public class MainActivity extends AppCompatActivity implements NavigationDialog.
 
     void initRootView() {
         root = findViewById(R.id.root);
-        root.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-            adjustViewByActionBarHeight();
-        });
+        root.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom)
+                -> adjustViewByActionBarHeight());
     }
 
     void loadData() {
@@ -179,7 +178,6 @@ public class MainActivity extends AppCompatActivity implements NavigationDialog.
             }
         }
         if (fullScreen) {
-            getWindow().setNavigationBarColor(android.graphics.Color.TRANSPARENT);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         } else {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
