@@ -25,6 +25,7 @@ public class WebViewClient extends android.webkit.WebViewClient
 
     @Override
     public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+        // Ignore SSL certificates errors
         handler.proceed();
     }
 }

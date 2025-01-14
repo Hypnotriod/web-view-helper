@@ -12,7 +12,6 @@ import java.util.ArrayList;
 
 public class URLListItemAdapter extends BaseAdapter implements View.OnClickListener {
     private final ArrayList<String> urls;
-    private final Context context;
     private final LayoutInflater inflater;
     private final OnItemClickListener onItemClickListener;
 
@@ -24,9 +23,8 @@ public class URLListItemAdapter extends BaseAdapter implements View.OnClickListe
 
     public URLListItemAdapter(Context context, ArrayList<String> urls, OnItemClickListener onItemClickListener) {
         this.urls = urls;
-        this.context = context;
         this.onItemClickListener = onItemClickListener;
-        inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
