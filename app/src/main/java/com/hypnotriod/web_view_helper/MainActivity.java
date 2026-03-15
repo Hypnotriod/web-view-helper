@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDialog.
     static final String KEY_FULL_SCREEN = "FULL_SCREEN";
     static final String KEY_HIDE_NAVIGATION = "HIDE_NAVIGATION";
     static final String KEY_LAYOUT_NO_LIMITS = "LAYOUT_NO_LIMITS";
+    static final String KEY_KEEP_SCREEN_ON = "KEEP_SCREEN_ON";
 
     View root;
     WebView webView;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDialog.
     boolean fullScreen = false;
     boolean hideNavigation = false;
     boolean layoutNoLimits = false;
+    boolean keepScreenOn = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDialog.
         initWebView();
         launchWebView();
         updateSystemUiLayout();
+        updateKeepScreenOn();
     }
 
     @Override
@@ -82,6 +85,13 @@ public class MainActivity extends AppCompatActivity implements NavigationDialog.
     }
 
     @Override
+    public void onToggleKeepScreenOn(boolean keepScreenOn) {
+        this.keepScreenOn = keepScreenOn;
+        updateKeepScreenOn();
+        saveData();
+    }
+
+    @Override
     public void onNavigationDialogDismiss() {
         updateSystemUiLayout();
     }
@@ -100,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDialog.
         navigationDialog.fullScreen = fullScreen;
         navigationDialog.hideNavigation = hideNavigation;
         navigationDialog.layoutNoLimits = layoutNoLimits;
+        navigationDialog.keepScreenOn = keepScreenOn;
         navigationDialog.show(getFragmentManager(), null);
     }
 
@@ -128,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDialog.
         hideNavigation = PreferenceConnector.readBoolean(this, KEY_HIDE_NAVIGATION, false);
         fullScreen = PreferenceConnector.readBoolean(this, KEY_FULL_SCREEN, false);
         layoutNoLimits = PreferenceConnector.readBoolean(this, KEY_LAYOUT_NO_LIMITS, false);
+        keepScreenOn = PreferenceConnector.readBoolean(this, KEY_KEEP_SCREEN_ON, false);
     }
 
     private void launchWebView() {
@@ -152,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements NavigationDialog.
         PreferenceConnector.writeBoolean(this, KEY_FULL_SCREEN, fullScreen);
         PreferenceConnector.writeBoolean(this, KEY_HIDE_NAVIGATION, hideNavigation);
         PreferenceConnector.writeBoolean(this, KEY_LAYOUT_NO_LIMITS, layoutNoLimits);
+        PreferenceConnector.writeBoolean(this, KEY_KEEP_SCREEN_ON, keepScreenOn);
     }
 
     private void openURL(String url) {
@@ -196,6 +209,14 @@ public class MainActivity extends AppCompatActivity implements NavigationDialog.
             root.setTop(rectangle.top);
         } else {
             root.setTop(0);
+        }
+    }
+
+    private void updateKeepScreenOn() {
+        if (keepScreenOn) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        } else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
     }
 }

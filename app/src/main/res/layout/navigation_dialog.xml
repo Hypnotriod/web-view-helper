@@ -21,8 +21,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:inputType="textUri"
-                android:textColor="@color/on_primary"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textColor="@color/on_primary" />
 
             <Button
                 android:id="@+id/btnOpenUrl"
@@ -67,12 +67,27 @@
                 android:text="@string/hide_navigation"
                 android:textColor="@color/on_primary" />
 
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
             <CheckBox
                 android:id="@+id/checkboxLayoutNoLimits"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="50"
                 android:text="@string/no_limits"
+                android:textColor="@color/on_primary" />
+
+            <CheckBox
+                android:id="@+id/checkboxKeepScreenOn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:text="@string/keep_screen_on"
                 android:textColor="@color/on_primary" />
         </TableRow>
 

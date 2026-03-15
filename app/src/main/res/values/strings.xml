@@ -8,4 +8,5 @@
     <string name="full_screen">No Status</string>
     <string name="hide_navigation">No Navigation</string>
     <string name="no_limits">No Limits</string>
+    <string name="keep_screen_on">Keep Screen On</string>
 </resources>

@@ -21,17 +21,18 @@ public class NavigationDialog extends DialogFragment implements View.OnClickList
     boolean fullScreen = false;
     boolean hideNavigation = false;
     boolean layoutNoLimits = false;
+    boolean keepScreenOn = false;
     NavigationDialogListener dialogListener;
 
     Button openURLButton;
     EditText urlTextInput;
     ListView listViewRecentURLs;
     CheckBox fullscreenCheckbox;
+    CheckBox keepScreenOnCheckbox;
     CheckBox hideNavigationCheckbox;
     CheckBox layoutNoLimitsCheckbox;
 
     Activity context;
-
 
 
     public interface NavigationDialogListener {
@@ -46,6 +47,8 @@ public class NavigationDialog extends DialogFragment implements View.OnClickList
         void onToggleHideNavigation(boolean hide);
 
         void onToggleLayoutNoLimits(boolean layoutNoLimits);
+
+        void onToggleKeepScreenOn(boolean keepScreenOn);
 
         void onNavigationDialogDismiss();
     }
@@ -88,6 +91,10 @@ public class NavigationDialog extends DialogFragment implements View.OnClickList
         fullscreenCheckbox.setChecked(fullScreen);
         fullscreenCheckbox.setOnClickListener(this);
 
+        keepScreenOnCheckbox = view.findViewById(R.id.checkboxKeepScreenOn);
+        keepScreenOnCheckbox.setChecked(keepScreenOn);
+        keepScreenOnCheckbox.setOnClickListener(this);
+
         hideNavigationCheckbox = view.findViewById(R.id.checkboxHideNavigation);
         hideNavigationCheckbox.setChecked(hideNavigation);
         hideNavigationCheckbox.setOnClickListener(this);
@@ -114,6 +121,8 @@ public class NavigationDialog extends DialogFragment implements View.OnClickList
             dialogListener.onToggleHideNavigation(hideNavigationCheckbox.isChecked());
         } else if (view.getId() == R.id.checkboxLayoutNoLimits) {
             dialogListener.onToggleLayoutNoLimits(layoutNoLimitsCheckbox.isChecked());
+        } else if (view.getId() == R.id.checkboxKeepScreenOn) {
+            dialogListener.onToggleKeepScreenOn(keepScreenOnCheckbox.isChecked());
         }
     }
 
